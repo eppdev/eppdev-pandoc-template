@@ -463,7 +463,9 @@ $endif$
         %       公司信息
         %------------------------------------------------
 
-	%\oldincludegraphics[width=50pt,center]{\thelogo}
+	$if(logo)$
+	\oldincludegraphics[width=50pt,center]{\thelogo}
+	$endif$
 
         \vspace{0.5\baselineskip} % Whitespace under the publisher logo
 

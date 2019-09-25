@@ -4,7 +4,8 @@ version: V0.1
 author: "jinlong.hao"
 date: "2019-08"
 company: EPPDEV.CN
-file-code: EPPDEV-JEE-USAGE-01
+file-code: EPPDEV-TEMPLATE-SAMPLE-01
+logo: true
 ...
  
  
