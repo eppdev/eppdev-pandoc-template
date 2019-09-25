@@ -131,7 +131,7 @@ latex工具，在windows下建议安装miktex，Linux和MacOS下建议安装texl
 
 在每个markdown最前面增加以下主要metadata信息，metadata内容开始行内容为三个“-”，结束行为三个“.”，示例如下：
 
-~~~
+~~~yml
 ---
 title: EPPDEV-PANDOC-TEMPLATE使用指南
 version: 1.0
