@@ -207,7 +207,7 @@ pandoc --listings --pdf-engine=xelatex --template eppdev-doc a.md -o a.pdf
 
  版权所有：2019，[郝金隆](mailto:jinlong.hao@eppdev.cn)
 
- 软件许可：[996 License v1.0](LICENSE-CN)
+ 软件许可：[ANTI-996 License v1.0](LICENSE-CN)
 
 
 # 附录
