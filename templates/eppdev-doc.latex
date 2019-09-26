@@ -76,7 +76,7 @@ $endif$
 \usepackage{framed}
 \usepackage{listings}
 \usepackage{graphicx,grffile}
-
+\usepackage{titletoc}
 
 
 % ----------------------------------
@@ -392,6 +392,8 @@ $endif$
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 % 二、文档正文
+% 2.1 封面
+% 2.2 修订记录
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{document}
@@ -478,17 +480,87 @@ $endif$
 \end{titlepage}
 \restoregeometry
 
-
-
-% %%%%%%%%%%%%%%%%%%%%%%%
-% 2.2 目录 
-% %%%%%%%%%%%%%%%%%%%%%%%
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 2.2 修订记录
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \setcounter{page}{1}
 \pagenumbering{Roman}
+
+$if(history)$
+\setlength{\parindent}{0.5em}
+
+{\Large \textbf{修订记录}} 
+
+% 表格开始
+\begin{longtable}[]{@{}cccl@{}}
+
+% 表头
+\toprule
+\begin{minipage}[b]{0.09\columnwidth}\centering
+序号\strut
+\end{minipage} & \begin{minipage}[b]{0.12\columnwidth}\centering
+修订人\strut
+\end{minipage} & \begin{minipage}[b]{0.14\columnwidth}\centering
+修订时间\strut
+\end{minipage} & \begin{minipage}[b]{0.54\columnwidth}\centering
+修订记录\strut
+\end{minipage}\tabularnewline
+\midrule
+\endfirsthead
+\toprule
+\begin{minipage}[b]{0.09\columnwidth}\centering
+序号\strut
+\end{minipage} & \begin{minipage}[b]{0.12\columnwidth}\centering
+修订人\strut
+\end{minipage} & \begin{minipage}[b]{0.14\columnwidth}\centering
+修订时间\strut
+\end{minipage} & \begin{minipage}[b]{0.54\columnwidth}\centering
+修订记录\strut
+\end{minipage}\tabularnewline
+\midrule
+\endhead
+% 表头结束
+
+% 表格正文
+$for(history)$
+\begin{minipage}[t]{0.09\columnwidth}\centering
+$history.version$\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\centering
+$history.author$\strut
+\end{minipage} & \begin{minipage}[t]{0.14\columnwidth}\centering
+$history.date$\strut
+\end{minipage} & \begin{minipage}[t]{0.54\columnwidth}\raggedright
+
+$for(history.desc)$
+  $history.desc$
+
+$endfor$
+\strut
+% end of items
+
+\end{minipage}\tabularnewline
+$endfor$
+% 表格正文结束
+
+\bottomrule
+\end{longtable}
+
+\newpage
+\setlength{\parindent}{\udfparindent}
+$endif$
+
+
+% %%%%%%%%%%%%%%%%%%%%%%%
+% 2.3 目录(包括正文目录和图表目录）
+% %%%%%%%%%%%%%%%%%%%%%%%
 
 % 正文目录
 \renewcommand*\contentsname{目录}
 { 
+\titlecontents{section}[0pt]{\addvspace{4mm}\filright}
+{\bfseries\contentspush{\bfseries{\thecontentslabel}\hspace{1.2mm}\ }}
+{}{\titlerule*[3pt]{\textbf{.}}\hspace*{-0.8em}\textbf{\contentspage}}
+
 \setcounter{tocdepth}{3}
 \tableofcontents
 \newpage
@@ -497,6 +569,13 @@ $endif$
 % 图目录
 $if(lof)$
 \listoffigures
+\newpage
+$endif$
+
+
+% 表目录
+$if(lot)$
+\listoftables
 \newpage
 $endif$
 

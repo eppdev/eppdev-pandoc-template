@@ -1,11 +1,20 @@
 ---
 title: "XXX项目软件开发需求说明书"
-version: V0.1
+version: V0.2
 author: "jinlong.hao"
 date: "2019-08"
 company: EPPDEV.CN
 file-code: EPPDEV-TEMPLATE-SAMPLE-01
 logo: true
+history:
+  - version: V0.1
+    author: 郝金隆
+    date: 2019-09-25
+    desc: 创建第一份示例文档
+  - version: V0.2
+    author: 郝金隆
+    date: 2019-09-26
+    desc: 按照新的模板，增加了修订记录内容
 ...
  
  

@@ -1,11 +1,22 @@
 ---
 title: EPPDEV-PANDOC-TEMPLATE使用指南
-version: 1.0
+version: 1.1
 author: 郝金隆
 date: 2019-09
 file-code: EPPDEV-PANDOC-TEMPLATE-USAGE
 header-right: 2019-09
 logo: true
+history:
+  - version: V1.0
+    author: 郝金隆
+    date: 2019-09-25
+    desc:
+      - 1. 创建文档
+      - 2. 完成第一版的文档说明
+  - version: V1.1
+    author: 郝金隆
+    date: 2019-09-26
+    desc: 增加了修订目录相关内容
 ...
 
 
@@ -137,6 +148,17 @@ version: 1.0
 author: 郝金隆
 date: 2019-09
 file-code: EPPDEV-PANDOC-TEMPLATE-USAGE
+history:
+  - version: V1.0
+    author: 郝金隆
+    date: 2019-09-25
+    desc:
+      - 1. 创建文档
+      - 2. 完成第一版的文档说明
+  - version: V1.1
+    author: 郝金隆
+    date: 2019-09-26
+    desc: 增加了修订目录相关内容
 ~~~
 
 其他可选配置项目如下：
@@ -184,7 +206,7 @@ pandoc --listings --pdf-engine=xelatex --template eppdev-doc a.md -o a.pdf
 本工程主要参考包括：
 
 * [Eisvogel模板](https://github.com/Wandmalfarbe/pandoc-latex-template)：
-  在Eisvogel模板的基础上做了定制修改，更适应国内环境的需要，主要有以下修改点
+  参考Eisvogel模板，针对国内环境的需要，做了个性化定制，主要取便在于
   * 指定了字体为微软雅黑，默认解决中文问题
   * 指定目录编号层级为5级
   * 解决了4、5级目录的格式问题，确保目录后有换行
