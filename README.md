@@ -1,6 +1,6 @@
 ---
 title: EPPDEV-PANDOC-TEMPLATE使用指南
-version: 1.1
+version: 1.2
 author: 郝金隆
 date: 2019-09
 file-code: EPPDEV-PANDOC-TEMPLATE-USAGE
@@ -17,6 +17,12 @@ history:
     author: 郝金隆
     date: 2019-09-26
     desc: 增加了修订目录相关内容
+  - version: V1.2
+    author: 郝金隆
+    date: 2019-09-28
+    desc: 
+      - 1.修改一级目录引导线的格式,增加点间距
+      - 2.修改修订目录的格式，去掉内容空行，标题粗体
 ...
 
 
@@ -60,7 +66,7 @@ latex工具，在windows下建议安装miktex，Linux和MacOS下建议安装texl
 
 为保证生成的pdf格式（自动插入封面、目录页、页眉页脚等信息），在本地环境中安装模板，具体步骤是：
 
-* 下载[eppdev-pandoc-template模板](https://github.com/eppdev/eppdev-pandoc-template/tree/master/templates)
+* 下载[eppdev-pandoc-template模板](https://github.com/eppdev/eppdev-pandoc-template/releases)
   将其保存到本地
 * 根据需要对模板进行相应的定制，具体定制方式参见下节
 * 将修改后的模板文件复制到指定目录下[^filename]
@@ -227,7 +233,7 @@ pandoc --listings --pdf-engine=xelatex --template eppdev-doc a.md -o a.pdf
 
  版权所有：2019，[郝金隆](mailto:jinlong.hao@eppdev.cn)
 
- 软件许可：[ANTI-996 License v1.0](LICENSE-CN)
+ 软件许可：[ANTI-996 License v1.0](https://github.com/eppdev/eppdev-pandoc-template/blob/master/LICENSE-CN)
 
 
 # 附录

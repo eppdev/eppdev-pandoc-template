@@ -133,7 +133,7 @@ $endif$
 \usepackage{hyperref}
 \hypersetup{
   pdftitle={$title$},
-  pdfauthor={$author$},
+  pdfauthor={EPPDEV},
   colorlinks=true,
   linkcolor=$if(linkcolor)$$linkcolor$$else$default-linkcolor$endif$,
   filecolor=$if(filecolor)$$filecolor$$else$default-filecolor$endif$,

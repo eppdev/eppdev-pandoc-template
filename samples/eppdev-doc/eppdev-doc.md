@@ -6,6 +6,8 @@ date: "2019-08"
 company: EPPDEV.CN
 file-code: EPPDEV-TEMPLATE-SAMPLE-01
 logo: true
+lot: true
+lof: true
 history:
   - version: V0.1
     author: 郝金隆
@@ -92,6 +94,10 @@ history:
 
 :测试表格
 
+
+## 图片
+
+![测试图片（logo)](logo.png)
 
 
  
