@@ -1,6 +1,6 @@
 ---
 title: EPPDEV-PANDOC-TEMPLATE使用指南
-version: 1.2
+version: V1.3
 author: 郝金隆
 date: 2019-09
 file-code: EPPDEV-PANDOC-TEMPLATE-USAGE
@@ -23,6 +23,12 @@ history:
     desc: 
       - 1.修改一级目录引导线的格式,增加点间距
       - 2.修改修订目录的格式，去掉内容空行，标题粗体
+  - version: V1.3
+    author: 郝金隆
+    date: 2019-10-13
+    desc:
+      - 1.增加了与DevOps的自动化处理脚本
+      - 2.增加了与DevOps集成的环境配置说明
 ...
 
 
@@ -207,6 +213,128 @@ pandoc --listings --pdf-engine=xelatex --template eppdev-doc a.md -o a.pdf
 
 > 若定制的模板修改了文件名，需要将命令中的eppdev-doc修改为修改后的文件名
 
+
+# 与DevOps集成
+
+本pandoc模板可以很容易的与gitlib-ci等devops工具相集成，实现pdf文件的自动生成，
+这样就无需每个人都安装一套pandoc, texlive等环境，下文以gitlab为例，说明如何
+与DevOps进行集成
+
+## 发布与编译环境准备
+
+首先需要再DevOps的执行节点进行环境配置[^executor]，要配置的环境包括：
+
+[^executor]: 是指具体进行编译执行的环境，如gitlab-ci中的gitlab-runner所在的服务器
+
+### 安装Pandoc
+
+安装方式可参考上文，注意很多服务器操作系统(如CentOS)官方库的pandoc还是1.x版本，
+使用该版本将不支持修订目录功能，建议手工安装最新的pandoc，具体可以通过官网下载
+最新版本，解压缩以后，设置PATH环境变量即可
+
+### 安装TexLive
+
+安装方式同样可以参考上文，但是服务器操作系统版本一般相对比较第，建议手工安装最新
+版本，可以从国内镜像如[华为](https://mirrors.huaweicloud.com/CTAN/systems/texlive/Images/)、
+[清华](https://mirrors.tuna.tsinghua.edu.cn/CTAN/systems/texlive/Images/)等站点下载
+最新的iso文件，当前最新为2019。具体安装命令如下：
+
+~~~shell
+wget https://mirrors.tuna.tsinghua.edu.cn/CTAN/systems/texlive/Images/texlive2019.iso
+sudo mount ./texlive2019.iso /mnt
+cd /mnt
+sudo ./install_tl
+~~~
+
+安装完成后，需要将修改环境变量，将最新的texlive目录下的bin目录添加到环境变量中
+
+### 安装template文件
+
+根据需要，将eppdev_doc.latex文件复制到进行编译执行的服务器用户主目录(如gitlab-ci对应的
+/home/gitlab-runner）下的.pandoc/templates目录下
+
+### 安装字体
+
+具体需安装的字体根据eppdev_doc.latex中的配置为准，本文以微软雅黑为例。将msyh.ttf,
+msyhbd.ttf两个文件上传到服务器上，然后进行安装：
+
+~~~shell
+sudo mkdir /usr/share/fonts/chinese
+sudo cp msyh*.ttf /usr/share/fonts/chinese
+cd /usr/share/fonts/chinese
+sudo mkfontsdir
+sudo mkfontscale
+~~~
+
+### 配置目标目录
+
+创建一个要发布的目标文档目录，提供编译执行者可读写的权限，以gitlab为例：
+
+~~~shell
+sudo  mkdir  /srv/doc
+sudo chown gitlab-runner /srv/doc
+~~~
+
+> 配置好目录以后后续即可通过nginx/httpd的文件列表功能，或者通过rsync同步
+> 到对应的文件管理服务器中，本文对此就不再赘述
+
+### 安装pandoc_deploy.sh
+
+将工程下载的pandoc_deploy.sh文件进行修改，将target_dir修改为上文创建的目标目录。
+然后将其复制到/usr/bin目录下，并为其添加可执行权限
+
+~~~shell
+chmod a+x pandoc_deploy.sh
+sudo cp pandoc_deploy.sh /usr/bin/
+~~~
+
+## DevOps的配置
+
+### 主要配置方式
+
+环境安装好了以后，即可在DevOps的环境中定义任务，完成自动的pdf生成工作，具体是的调用命令为：
+
+~~~shell
+/usr/bin/pandoc_deploy.sh 本工程对应的目录
+~~~
+
+> 注意：此处的目录为针对本工程的代码对应的所有目录
+
+
+### gitlab-ci配置说明
+
+在仓库主目录下创建.gitlab-ci.yml文件，示例内容如下：
+
+~~~yml
+stages:
+  - deploy
+
+
+doc-deploy:
+  stage: deploy
+  script:
+    -  /usr/bin/pandoc_deploy.sh tmp_doc
+  tags:
+    - pandoc
+~~~
+
+上述配置主要说明如下：
+
+1. stages: deploy, 是指本工程编译只有一个stage
+2. doc-deploy: 是指定义的一个任务，其所属的stage为deploy
+3. /usr/bin/pandoc_deploy.sh tmp_doc 是指本工程生成的pdf将复制到/srv/doc/tmp_doc目录下[^dir]
+4. tags:pandoc, 是因为环境中有多个gitlab-runner，仅有该标签的runner配置了pandoc环境
+
+[^dir]: 之所以是这个目录是因为pandoc_deploy.sh中的target_dir为/srv/doc
+
+
+## 下一步的定制
+
+可以根据需要对pandoc_deploy.sh进行修改，通过rsync将其与其他文档管理系统进行同步。
+当然，若只是简单的通过httpd或者nginx进行文件展示，则该文件无需修改，
+但是注意至少需要通过htpasswd进行权限验证，以避免企业机密的外泄！
+
+
 # 引用参考 
 
 本工程主要参考包括：
@@ -271,4 +399,47 @@ IDE环境：
   或者[markdown](https://plugins.jetbrains.com/plugin/7793-markdown)插件
 * Eclipse: 可以安装[markdown-text-editor](https://marketplace.eclipse.org/content/markdown-text-editor)插件
 * VSCode: 可以安装[markdown](https://code.visualstudio.com/docs/languages/markdown)插件
+
+## 配置http环境的安全认证
+
+以CentOS环境下的nginx为例
+
+### 首先安装httpd-tools：
+
+~~~shell
+sudo yum install httpd-tools
+~~~
+
+### 然后创建密码文件
+
+~~~shell
+sudo mkdir /etc/nginx/pass
+sudo htpasswd -cb /etc/nginx/pass/mypass eppdev 123
+~~~
+
+> 上述命令的作用是在该目录下创建一个mypass文件，用户名是eppdev，
+> 密码是123
+
+### 修改nginx配置
+
+在/etc/nginx/nginx.conf文件中添加以下配置
+
+~~~
+   location /doc/ {
+        alias /srv/doc/ ;
+        auth_basic "Input Password:"; 
+        auth_basic_user_file "/etc/nginx/pass/mypass"; 
+        autoindex on;
+        autoindex_exact_size off;
+        autoindex_localtime on;
+   }
+~~~
+
+上述代码的说明：
+
+1. 前两行是指创建一个虚拟的链接子目录，映射到/srv/doc/目录下，即访问
+   http://host:port/doc/即为对应的/srv/doc目录
+2. 第3，4行是指使用的是基础的认证机制，认证文件即为上文创建的密码文件
+3. 第5,6,7行是指启动文件夹文件索引功能，直接通过链接可以访问目录下的文件
+
 
